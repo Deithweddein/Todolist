@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" style="font-family: 'Lobster';">
+    <style>
+        body {
+            background-color: #2c2c2c;
+        }
+
+        h3{
+          color: honeydew;
+        }
+        listback {
+            background-color: #ffffff;
+            border-radius: 5pxrgb(255, 255, 255);
+            padding: 10px;
+            margin: 10px;
+        }
+    </style>
+<style>
+    body {
+        /* background-image: url("https://c7.alamy.com/comp/FGTT6B/the-state-entry-of-cyrus-into-babylon-c-540-bc-cyrus-ii-of-persia-FGTT6B.jpg"); */
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+</style>
+    <div style="text-align: center;">
+        <h1 style="transition: color 0.3s; color: goldenrod;"
+            onmouseover="this.style.color='white'; this.style.textShadow = '2px 2px 2px black';"
+            onmouseout="this.style.color='goldenrod'; this.style.textShadow = 'none';">Babylon JS Todoist</h1>
+
+    </div>
+
+
+<form action="/TodoList" method="post">
+    <input type="text" id="TodoMain" name="TodoMain"> 
+    <button type="submit">Add</button>
+</form>
+
+
+<h1>u bored?</h1>
+
+<div class="Listback">
+  <tbody>
+    <% if (todos.length > 0) { %>
+        <tbody>
+          <% todos.forEach((todo) => { %>
+            <tr>
+              <td><h3><%= todo.TodoName %></h3></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      <% } else { %>
+        <p>You don't have any todos yet!</p>
+      <% } %>
+</tbody>
+
+</div>
+<body>
+</body>
+
+</html>
