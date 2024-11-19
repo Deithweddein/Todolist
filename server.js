@@ -1,6 +1,7 @@
 const express  = require('express');
 const mongoose = require('mongoose');
 const Todorow = require('./models/todorowSchema.js'); // Import the Todorow model
+const todorowSchema = require('./models/todorowSchema.js');
 
 
 
@@ -47,7 +48,50 @@ app.post('/TodoList', async (req, res) => {
     }
   });   
 
+app.post('/DeleteMany', async (req, res) => {
+    try {
+      await Todorow.deleteMany(); // Delete all todos
+      res.redirect('/');
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error deleting todos');
+    }
+  });
 
+
+  app.post('/DeleteTodo', async (req, res) => {
+    try {
+      const todoId = req.body.todoId; // Get the todo ID from the form submission
+  
+      // Find the todo by its ID and delete it
+      await Todorow.findByIdAndDelete(todoId);
+  
+      // Redirect to the Todo list after deletion
+      res.redirect('/');
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error deleting todo');
+    }
+  });
+
+  app.post('/EditTodo', async (req, res) => {
+    try {
+      const { todoId, updatedTodoName} = req.body;
+
+      if (!updatedTodoName) {
+        return res.status(400).send('Todo name is required');
+      }
+
+      await todorowSchema.findByIdAndUpdate(todoId, { TodoName: updatedTodoName });
+      res.redirect('/');
+
+    } catch (err){
+      console.error(err);
+      res.status(500).send('Error updating todo');  
+    }
+    });
+  
+  
 
 /// server config   
 

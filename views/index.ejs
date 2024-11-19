@@ -1,61 +1,200 @@
 <!DOCTYPE html>
-<html lang="en" style="font-family: 'Lobster';">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Babylon JS Todoist</title>
     <style>
+        /* Global Styles */
         body {
-            background-color: #2c2c2c;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f7; /* Subtle off-white background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
         }
 
-        h3{
-          color: honeydew;
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        listback {
-            background-color: #ffffff;
-            border-radius: 5pxrgb(255, 255, 255);
+
+        form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 12px 16px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            margin-right: 10px;
+            width: 300px;
+            transition: border-color 0.3s ease;
+            background-color: #f9f9f9;
+        }
+
+        input[type="text"]:focus {
+            border-color: #0071e3;
+            outline: none;
+        }
+
+        button {
+            background-color: #0071e3;
+            color: white;
+            font-size: 1rem;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #005bb5;
+        }
+
+        .TodoContainer {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin: 15px 0;
+            padding: 20px;
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .TodoContainer h3 {
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center; /* Centers h3 */
+        }
+
+        .TodoContainer .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .TodoContainer input[type="text"] {
+            width: 70%;
             padding: 10px;
-            margin: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .TodoContainer button {
+            padding: 10px 15px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .TodoContainer button.edit-button {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .TodoContainer button.edit-button:hover {
+            background-color: #45a049;
+        }
+
+        .TodoContainer button.delete-button {
+            background-color: #e33b3b;
+            color: white;
+        }
+
+        .TodoContainer button.delete-button:hover {
+            background-color: #c02828;
+        }
+
+        .empty-state {
+            font-size: 1.2rem;
+            color: #777;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Delete All Button */
+        .delete-all {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
         }
     </style>
-<style>
-    body {
-        /* background-image: url("https://c7.alamy.com/comp/FGTT6B/the-state-entry-of-cyrus-into-babylon-c-540-bc-cyrus-ii-of-persia-FGTT6B.jpg"); */
-        background-repeat: no-repeat;
-        background-size: cover;
-    }
-</style>
-    <div style="text-align: center;">
-        <h1 style="transition: color 0.3s; color: goldenrod;"
-            onmouseover="this.style.color='white'; this.style.textShadow = '2px 2px 2px black';"
-            onmouseout="this.style.color='goldenrod'; this.style.textShadow = 'none';">Babylon JS Todoist</h1>
+</head>
+<body>
 
+    <div class="container">
+        <h1>Babylon JS Todoist</h1>
+
+        <!-- Todo Add Form -->
+        <form action="/TodoList" method="post">
+            <input type="text" id="TodoMain" name="TodoMain" placeholder="Enter a new todo">
+            <button type="submit">Add</button>
+        </form>
+
+        <h1>To-Do List</h1>
+
+        <!-- Todo List -->
+        <div>
+            <% if (todos.length > 0) { %>
+                <% todos.forEach((todo) => { %>
+                    <div class="TodoContainer">
+                        <h3><%= todo.TodoName %></h3>
+                        <div class="button-container">
+                            <!-- Delete Todo Button -->
+                            <form action="/DeleteTodo" method="post">
+                                <input type="hidden" name="todoId" value="<%= todo._id %>">
+                                <button type="submit" class="delete-button">Delete</button>
+                            </form>
+
+                            <!-- Edit Todo Button -->
+                            <form action="/EditTodo" method="post">
+                                <input type="hidden" name="todoId" value="<%= todo._id %>">
+                                <input type="text" name="updatedTodoName" placeholder="Edit todo..." required>
+                                <button type="submit" class="edit-button">Edit</button>
+                            </form>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p class="empty-state">You don't have any todos yet!</p>
+            <% } %>
+        </div>
+
+        <!-- Delete All Button -->
+        <div class="delete-all">
+            <form action="/DeleteMany" method="post">
+                <button type="submit">Delete All</button>
+            </form>
+        </div>
     </div>
 
-
-<form action="/TodoList" method="post">
-    <input type="text" id="TodoMain" name="TodoMain"> 
-    <button type="submit">Add</button>
-</form>
-
-
-<h1 style="text-align: center;">u bored?</h1> 
-
-<div class="Listback" style="background-color: rgb(59, 59, 59); text-align: center; display: flex; justify-content: center; align-items: center;">
-  <% if (todos.length > 0) { %>
-    <table style="margin: auto;">
-      <tbody>
-        <% todos.forEach((todo) => { %>
-          <tr>
-            <td><h3><%= todo.TodoName %></h3></td>
-          </tr>
-        <% }) %>
-      </tbody>
-    </table>
-  <% } else { %>
-    <p style="text-align: center;">You don't have any todos yet!</p>
-  <% } %>
-</div>
-
-</div>
-<body>
 </body>
-
 </html>
