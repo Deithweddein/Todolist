@@ -36,22 +36,23 @@
 </form>
 
 
-<h1>u bored?</h1>
+<h1 style="text-align: center;">u bored?</h1> 
 
-<div class="Listback">
-  <tbody>
-    <% if (todos.length > 0) { %>
-        <tbody>
-          <% todos.forEach((todo) => { %>
-            <tr>
-              <td><h3><%= todo.TodoName %></h3></td>
-            </tr>
-          <% }) %>
-        </tbody>
-      <% } else { %>
-        <p>You don't have any todos yet!</p>
-      <% } %>
-</tbody>
+<div class="Listback" style="background-color: rgb(59, 59, 59); text-align: center; display: flex; justify-content: center; align-items: center;">
+  <% if (todos.length > 0) { %>
+    <table style="margin: auto;">
+      <tbody>
+        <% todos.forEach((todo) => { %>
+          <tr>
+            <td><h3><%= todo.TodoName %></h3></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p style="text-align: center;">You don't have any todos yet!</p>
+  <% } %>
+</div>
 
 </div>
 <body>
